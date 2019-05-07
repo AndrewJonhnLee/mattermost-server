@@ -86,6 +86,9 @@ var PERMISSION_READ_OTHERS_BOTS *Permission
 var PERMISSION_MANAGE_BOTS *Permission
 var PERMISSION_MANAGE_OTHERS_BOTS *Permission
 var PERMISSION_VIEW_MEMBERS *Permission
+var PERMISSION_LIST_SYSTEM_GROUPS *Permission
+var PERMISSION_MANAGE_TEAM_GROUPS *Permission
+var PERMISSION_MANAGE_CHANNEL_GROUPS *Permission
 
 // General permission that encompasses all system admin functions
 // in the future this could be broken up to allow access to some
@@ -526,6 +529,24 @@ func initializePermissions() {
 		"authentication.permisssions.view_members.description",
 		PERMISSION_SCOPE_TEAM,
 	}
+	PERMISSION_LIST_SYSTEM_GROUPS = &Permission{
+		"list_system_groups",
+		"authentication.permisssions.list_system_groups.name",
+		"authentication.permisssions.list_system_groups.description",
+		PERMISSION_SCOPE_SYSTEM,
+	}
+	PERMISSION_MANAGE_TEAM_GROUPS = &Permission{
+		"manage_team_groups",
+		"authentication.permisssions.manage_team_groups.name",
+		"authentication.permisssions.manage_team_groups.description",
+		PERMISSION_SCOPE_TEAM,
+	}
+	PERMISSION_MANAGE_CHANNEL_GROUPS = &Permission{
+		"manage_channel_groups",
+		"authentication.permisssions.manage_channel_groups.name",
+		"authentication.permisssions.manage_channel_groups.description",
+		PERMISSION_SCOPE_TEAM,
+	}
 
 	ALL_PERMISSIONS = []*Permission{
 		PERMISSION_INVITE_USER,
@@ -599,6 +620,9 @@ func initializePermissions() {
 		PERMISSION_MANAGE_OTHERS_BOTS,
 		PERMISSION_MANAGE_SYSTEM,
 		PERMISSION_VIEW_MEMBERS,
+		PERMISSION_LIST_SYSTEM_GROUPS,
+		PERMISSION_MANAGE_TEAM_GROUPS,
+		PERMISSION_MANAGE_CHANNEL_GROUPS,
 	}
 }
 

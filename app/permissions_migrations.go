@@ -23,6 +23,7 @@ const (
 	MIGRATION_KEY_APPLY_CHANNEL_MANAGE_DELETE_TO_CHANNEL_USER = "apply_channel_manage_delete_to_channel_user"
 	MIGRATION_KEY_REMOVE_CHANNEL_MANAGE_DELETE_FROM_TEAM_USER = "remove_channel_manage_delete_from_team_user"
 	MIGRATION_KEY_VIEW_MEMBERS_NEW_PERMISSION                 = "view_members_new_permission"
+	MIGRATION_KEY_ADD_LIST_AND_MANAGE_GROUPS                  = "add_list_and_manage_groups"
 
 	PERMISSION_MANAGE_SYSTEM                     = "manage_system"
 	PERMISSION_MANAGE_EMOJIS                     = "manage_emojis"
@@ -51,6 +52,9 @@ const (
 	PERMISSION_MANAGE_PUBLIC_CHANNEL_PROPERTIES  = "manage_public_channel_properties"
 	PERMISSION_MANAGE_PRIVATE_CHANNEL_PROPERTIES = "manage_private_channel_properties"
 	PERMISSION_VIEW_MEMBERS                      = "view_members"
+	PERMISSION_LIST_SYSTEM_GROUPS                = "list_system_groups"
+	PERMISSION_MANAGE_TEAM_GROUPS                = "manage_team_groups"
+	PERMISSION_MANAGE_CHANNEL_GROUPS             = "manage_channel_groups"
 )
 
 func isRole(role string) func(string, map[string]map[string]bool) bool {
@@ -273,6 +277,23 @@ func getViewMembersPermissionMigration() permissionsMap {
 	}
 }
 
+func addListAndManageGroupsMigration() permissionsMap {
+	return permissionsMap{
+		permissionTransformation{
+			On:  isRole(model.SYSTEM_ADMIN_ROLE_ID),
+			Add: []string{PERMISSION_LIST_SYSTEM_GROUPS, PERMISSION_MANAGE_TEAM_GROUPS, PERMISSION_MANAGE_CHANNEL_GROUPS},
+		},
+		permissionTransformation{
+			On:  permissionExists(model.TEAM_ADMIN_ROLE_ID),
+			Add: []string{PERMISSION_LIST_SYSTEM_GROUPS, PERMISSION_MANAGE_TEAM_GROUPS},
+		},
+		permissionTransformation{
+			On:  permissionExists(model.CHANNEL_ADMIN_ROLE_ID),
+			Add: []string{PERMISSION_LIST_SYSTEM_GROUPS, PERMISSION_MANAGE_CHANNEL_GROUPS},
+		},
+	}
+}
+
 // DoPermissionsMigrations execute all the permissions migrations need by the current version.
 func (a *App) DoPermissionsMigrations() *model.AppError {
 	PermissionsMigrations := []struct {
@@ -287,6 +308,7 @@ func (a *App) DoPermissionsMigrations() *model.AppError {
 		{Key: MIGRATION_KEY_APPLY_CHANNEL_MANAGE_DELETE_TO_CHANNEL_USER, Migration: applyChannelManageDeleteToChannelUser},
 		{Key: MIGRATION_KEY_REMOVE_CHANNEL_MANAGE_DELETE_FROM_TEAM_USER, Migration: removeChannelManageDeleteFromTeamUser},
 		{Key: MIGRATION_KEY_VIEW_MEMBERS_NEW_PERMISSION, Migration: getViewMembersPermissionMigration},
+		{Key: MIGRATION_KEY_ADD_LIST_AND_MANAGE_GROUPS, Migration: addListAndManageGroupsMigration},
 	}
 
 	for _, migration := range PermissionsMigrations {

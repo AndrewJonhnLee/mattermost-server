@@ -217,6 +217,8 @@ func MakeDefaultRoles() map[string]*Role {
 		Description: "authentication.roles.channel_admin.description",
 		Permissions: []string{
 			PERMISSION_MANAGE_CHANNEL_ROLES.Id,
+			PERMISSION_MANAGE_CHANNEL_GROUPS.Id,
+			PERMISSION_LIST_SYSTEM_GROUPS.Id,
 		},
 		SchemeManaged: true,
 		BuiltIn:       true,
@@ -285,6 +287,8 @@ func MakeDefaultRoles() map[string]*Role {
 			PERMISSION_MANAGE_OTHERS_SLASH_COMMANDS.Id,
 			PERMISSION_MANAGE_INCOMING_WEBHOOKS.Id,
 			PERMISSION_MANAGE_OUTGOING_WEBHOOKS.Id,
+			PERMISSION_MANAGE_TEAM_GROUPS.Id,
+			PERMISSION_LIST_SYSTEM_GROUPS.Id,
 		},
 		SchemeManaged: true,
 		BuiltIn:       true,
